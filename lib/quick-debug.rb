@@ -1,4 +1,5 @@
-require "#{File.dirname(__FILE__)}/quick-debug/version"
+require 'pathname'
+require "#{File.dirname(Pathname.new(__FILE__).realpath)}/quick-debug/version"
 
 class D
   @@logpath = '/tmp/quick-debug.txt'

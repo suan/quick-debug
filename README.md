@@ -59,7 +59,7 @@ require 'quick-debug'
 For especially legacy/hostile environments, or if you want to use this _really_ quickly, you can directly require the `quick-debug.rb` file in your code - it has no dependencies. If you do this often, a symlink could come in really useful. For example:
 
 ```
-$ sudo ln -s /Library/Ruby/Gems/1.8/gems/quick-debug-0.0.1/lib/quick-debug.rb /quick-debug
+$ sudo ln -s /Library/Ruby/Gems/1.8/gems/quick-debug-0.0.1/lib/quick-debug.rb /quick-debug.rb
 ```
 
 Then, from within your code:
