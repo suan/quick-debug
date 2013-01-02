@@ -1,4 +1,5 @@
 require 'pathname'
+require 'pp'
 require "#{File.dirname(Pathname.new(__FILE__).realpath)}/quick-debug/version"
 
 class D
@@ -46,7 +47,7 @@ class D
     end
     if block
       varname = block.call.to_s
-      outputs << "#{varname} ~> #{eval(varname, block).inspect}"
+      outputs << "#{varname} ~> #{PP.pp eval(varname, block), ''}"
     end
     outputs.join(' ')
   end
