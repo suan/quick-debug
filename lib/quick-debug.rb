@@ -27,10 +27,9 @@ class D
 
   def self.lg(command = nil, &block)
     return if not @@active[:lg]
-    caller_method = caller.first
     timestamp = Time.now.strftime("%a %H:%M:%S")
     File.open(@@logpath, 'a+') do |f|
-      f.puts "[#{timestamp}] #{eval_inspect(caller_method, command, &block)}"
+      f.puts "[#{timestamp}] #{eval_inspect(caller.first, command, &block)}"
     end
   end
 
@@ -40,15 +39,22 @@ class D
 
   private
 
-  def self.eval_inspect(caller_method, command = nil, &block)
+  def self.eval_inspect(caller_string, command = nil, &block)
     outputs = []
     if command && [:in, :at].include?(command.to_sym)
-      outputs << "[#{caller_method}]"
+      outputs << "[#{strip_filepath caller_string}]"
     end
     if block
       varname = block.call.to_s
       outputs << "#{varname} ~> #{PP.pp eval(varname, block), ''}"
     end
     outputs.join(' ')
+  end
+
+  def self.strip_filepath caller_string
+    filepath_and_line = caller_string.split(':in ').first
+    filepath = filepath_and_line.split(':').first
+    filename = File.basename(filepath)
+    caller_string.gsub filepath, filename
   end
 end
