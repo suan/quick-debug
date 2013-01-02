@@ -82,7 +82,7 @@ prints `@somevar ~> <contents of @somevar.inspect>` to STDOUT. Any object can be
 ```
 D.bg(:in){'@somevar'} or D.bg(:at){'@somevar'}
 ```
-prints `[<caller method and line number>] @somevar ~> <contents of @somevar.inspect>` to STDOUT. If the block is omitted, only the caller method and line number will be printed.
+prints `[<caller filename, method, and line number>] @somevar ~> <contents of @somevar.inspect>` to STDOUT. If the block is omitted, only the caller method and line number will be printed.
 
 ```
 D.lg{'@somevar'}
@@ -99,5 +99,14 @@ D.str{'@somevar'}
 D.str(:in){'@somevar'} or D.str(:at){'@somevar'}
 ```
 The above methods just return the deubg output as a string, rather than printing them anywhere. This can be very useful if you need to use your own logging framework, for example: `logger.debug D.str{'@somevar'}`.
+
+```
+D.disable :bg
+```
+prevents all `D.bg` statements from printing anything. You can also pass in `:lg` or `:all` to disable `D.lg` statements or just everything respectively. You can use
+```
+D.enable
+```
+to re-enable them. It accepts the same options.
 
 ### Happy Debugging!! ###
