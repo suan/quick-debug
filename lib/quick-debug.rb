@@ -7,12 +7,20 @@ class D
   @@active = {:bg => true, :lg => true}
 
   def self.disable where
-    locations = where == :all ? [:bg, :lg] : where
+    locations = if where == :all
+                  [:bg, :lg]
+                else
+                  [where]
+                end
     locations.each{ |location| @@active[location] = false }
   end
 
   def self.enable where
-    locations = where == :all ? [:bg, :lg] : where
+    locations = if where == :all
+                  [:bg, :lg]
+                else
+                  [where]
+                end
     locations.each{ |location| @@active[location] = true }
   end
 
