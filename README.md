@@ -24,7 +24,7 @@ What if you could just do this instead?
 
 ```ruby
 def main
-  D.bg :in
+  D.bg
   movie_dirs.each do |movie_dir|
     Find.find(movie_dir) do |fn|
       if fn.is_movie?
@@ -32,7 +32,7 @@ def main
         movie = nil
         if movie_dirs.include? parent_dir or parent_dir.has_another_movie(fn)
           movie = get_movie fn
-          D.bg(:in){'movie'}
+          D.bg{'movie'}
         else
           movie = get_movie(fn, true)
         end
@@ -67,7 +67,7 @@ Then, from within your code:
 ```ruby
 require '/quick-debug'
 def main
-  D.bg :in
+  D.bg
   movie_dirs.each do |movie_dir|
   ....
 ```
@@ -77,16 +77,10 @@ Usage
 ```
 D.bg{'@somevar'}
 ```
-prints `@somevar ~> <contents of @somevar.inspect>` to STDOUT. Any object can be passed in, but it must be surrounded by quotes or be made a symbol.
-
-```
-D.bg(:in){'@somevar'} or D.bg(:at){'@somevar'}
-```
-prints `[<caller filename, method, and line number>] @somevar ~> <contents of @somevar.inspect>` to STDOUT. If the block is omitted, only the caller method and line number will be printed.
+Prints `[<caller filename, method, and line number>] @somevar ~> <contents of @somevar.inspect>` to STDOUT. Any object can be passed in, but it must be surrounded by quotes or be made a symbol. If the block is omitted, only the caller method and line number will be printed.
 
 ```
 D.lg{'@somevar'}
-D.lg(:in){'@somevar'} or D.lg(:at){'@somevar'}
 ```
 Same as above, but prints to `/tmp/quick-debug.txt` instead. A short timestamp is also printed at the start of each line. To change the output filepath, do
 
@@ -96,7 +90,6 @@ D.logpath = '</some/path/log.txt>'
 
 ```
 D.str{'@somevar'}
-D.str(:in){'@somevar'} or D.str(:at){'@somevar'}
 ```
 The above methods just return the deubg output as a string, rather than printing them anywhere. This can be very useful if you need to use your own logging framework, for example: `logger.debug D.str{'@somevar'}`.
 
@@ -108,5 +101,11 @@ prevents all `D.bg` statements from printing anything. You can also pass in `:lg
 D.enable
 ```
 to re-enable them. It accepts the same options.
+
+```
+D.bg(:force){'@somevar'}
+D.lg(:force){'@somevar'}
+```
+The debug methods accept a `:force` argument, which will cause those calls to run even though that output location been disabled.
 
 ### Happy Debugging!! ###

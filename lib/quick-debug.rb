@@ -29,29 +29,26 @@ class D
   end
 
   def self.bg(command = nil, &block)
-    return if not @@active[:bg]
-    puts eval_inspect(caller.first, command, &block)
+    return if !@@active[:bg] && command != :force
+    puts eval_inspect(caller.first, &block)
   end
 
   def self.lg(command = nil, &block)
-    return if not @@active[:lg]
+    return if !@@active[:lg] && command != :force
     timestamp = Time.now.strftime("%a %H:%M:%S")
     File.open(@@logpath, 'a+') do |f|
-      f.puts "[#{timestamp}] #{eval_inspect(caller.first, command, &block)}"
+      f.puts "[#{timestamp}] #{eval_inspect(caller.first, &block)}"
     end
   end
 
   def self.str(command = nil, &block)
-    eval_inspect(caller.first, command, &block)
+    eval_inspect(caller.first, &block)
   end
 
   private
 
-  def self.eval_inspect(caller_string, command = nil, &block)
-    outputs = []
-    if command && [:in, :at].include?(command.to_sym)
-      outputs << "[#{strip_filepath caller_string}]"
-    end
+  def self.eval_inspect(caller_string, &block)
+    outputs = ["[#{strip_filepath caller_string}]"]
     if block
       varname = block.call.to_s
       outputs << "#{varname} ~> #{PP.pp eval(varname, block), ''}"
