@@ -5,6 +5,7 @@ require "#{File.dirname(Pathname.new(__FILE__).realpath)}/quick-debug/version"
 class D
   @@logpath = '/tmp/quick-debug.txt'
   @@active = {:bg => true, :lg => true}
+  @@print_separator = true
 
   def self.disable where
     locations = if where == :all
@@ -37,7 +38,8 @@ class D
     return if !@@active[:lg] && command != :force
     timestamp = Time.now.strftime("%a %H:%M:%S")
     File.open(@@logpath, 'a+') do |f|
-      f.puts "[#{timestamp}] #{eval_inspect(caller.first, &block)}"
+      print_separator_if_needed f
+      f.puts "[#{timestamp}] #{eval_inspect(caller[1], &block)}"
     end
   end
 
@@ -46,6 +48,13 @@ class D
   end
 
   private
+
+  def self.print_separator_if_needed file
+    if @@print_separator
+      file.puts "\n\n#{'=' * 70}\n\n"
+      @@print_separator = false
+    end
+  end
 
   def self.eval_inspect(caller_string, &block)
     outputs = ["[#{strip_filepath caller_string}]"]
