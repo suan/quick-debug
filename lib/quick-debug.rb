@@ -39,7 +39,7 @@ class D
     timestamp = Time.now.strftime("%a %H:%M:%S")
     File.open(@@logpath, 'a+') do |f|
       print_separator_if_needed f
-      f.puts "[#{timestamp}] #{eval_inspect(caller[1], &block)}"
+      f.puts "[#{timestamp}] #{eval_inspect(caller[2], &block)}"
     end
   end
 
